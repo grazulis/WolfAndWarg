@@ -25,11 +25,13 @@ namespace WolfAndWarg.Game
                 x++;
                 if (Tiles[i].GetScreenPosition(tileWidth).X >= screenManager.GraphicsDevice.Viewport.Width)
                 {
+                    if (MapWidth == 0) MapWidth = x;
                     x = 0;
                     y++;
                 }
 
             }
+            MapHeight = y;
         }
         int tileWidth = 64;
         public int TileWidth { 
@@ -40,12 +42,27 @@ namespace WolfAndWarg.Game
         public int TileHeight { get; set; }
         public Tile[] Tiles { get; set; }
 
+        public int MapWidth { get; set; }
+        public int MapHeight { get; set; }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (var tile in Tiles)
             {
                 spriteBatch.Draw(tile.Texture, tile.GetScreenPosition(tileWidth), Color.White);
             }
+        }
+
+        public Vector2 GetSpritePosition(ISprite sprite)
+        {
+            var tile = Tiles.First(x => x.MapPosition.X == (int) sprite.Position.X && x.MapPosition.Y == (int) sprite.Position.Y);
+            var centre =  tile.GetCentre(tileWidth);
+
+            //Magic number 4 here because we are currently displaying sprite a half size.
+            //TODO Find better way to manage this
+            centre.Y -= sprite.Texture.Height/4;
+            centre.X -= sprite.Texture.Width/4;
+            return centre;
         }
     }
 

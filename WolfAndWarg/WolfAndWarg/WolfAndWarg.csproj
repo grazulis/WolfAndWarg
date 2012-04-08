@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\ISprite.cs" />
     <Compile Include="Game\Map.cs" />
     <Compile Include="Game\Mob.cs" />
     <Compile Include="Game\Player.cs" />

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace WolfAndWarg.Game
 {
-    class Mob
+    class Mob : ISprite
     {
         private Random random = new Random(DateTime.Now.Millisecond);
         public string Name { get; set; }
@@ -25,8 +25,7 @@ namespace WolfAndWarg.Game
 
             movement.Normalize();
             
-
-            Position += movement * 25;
+            Position += movement;
         }
     }
 }

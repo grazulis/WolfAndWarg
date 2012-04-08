@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace WolfAndWarg.Game
 {
-    class Player
+    class Player : ISprite
     {
         
         public int Health { get; set; }
@@ -17,7 +17,7 @@ namespace WolfAndWarg.Game
 
         public void Move(Vector2 movement)
         {
-            Position += movement * 25;
+            Position += movement;
         }
     }
 }

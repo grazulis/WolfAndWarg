@@ -68,8 +68,7 @@ namespace GameStateManagement
 
             player1.Health = 10;
             player1.Texture = this.content.Load<Texture2D>("player");
-            var playerStartPosition = new Vector2(ScreenManager.GraphicsDevice.Viewport.Width/2 - 10,
-                                                  ScreenManager.GraphicsDevice.Viewport.Height/2 - 10);
+            var playerStartPosition = new Vector2(5,5);
             player1.Position = playerStartPosition;
 
             enemy1.Health = 10;
@@ -145,7 +144,7 @@ namespace GameStateManagement
             }
         }
 
-
+        private static KeyboardState previousKeyboardState;
         /// <summary>
         /// Lets the game respond to player input. Unlike the Update method,
         /// this will only be called when the gameplay screen is active.
@@ -155,6 +154,7 @@ namespace GameStateManagement
             if (input == null)
                 throw new ArgumentNullException("input");
 
+            
             // Look up inputs for the active player profile.
             int playerIndex = (int)ControllingPlayer.Value;
 
@@ -177,19 +177,17 @@ namespace GameStateManagement
                 // Otherwise move the player position.
                 Vector2 movement = Vector2.Zero;
 
-
-                if (keyboardState.IsKeyDown(Keys.Left))
-                {
+                //TODO Create Input helper to manage key presses better
+                if (keyboardState.IsKeyDown(Keys.Left) && !previousKeyboardState.IsKeyDown(Keys.Left))
                     movement.X--;
-                }
-
-                if (keyboardState.IsKeyDown(Keys.Right))
+                    
+                if (keyboardState.IsKeyDown(Keys.Right) && !previousKeyboardState.IsKeyDown(Keys.Right))
                     movement.X++;
 
-                if (keyboardState.IsKeyDown(Keys.Up))
+                if (keyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up))
                     movement.Y--;
 
-                if (keyboardState.IsKeyDown(Keys.Down))
+                if (keyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down))
                     movement.Y++;
 
                 Vector2 thumbstick = gamePadState.ThumbSticks.Left;
@@ -214,6 +212,7 @@ namespace GameStateManagement
 
                 
             }
+            previousKeyboardState = keyboardState;
         }
 
 
@@ -234,9 +233,9 @@ namespace GameStateManagement
 
             map.Draw(spriteBatch);
 
-            spriteBatch.Draw(player1.Texture, player1.Position, null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0 );
+            spriteBatch.Draw(player1.Texture, map.GetSpritePosition(player1), null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0 );
 
-            spriteBatch.Draw(enemy1.Texture, enemy1.Position, null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
+            spriteBatch.Draw(enemy1.Texture, map.GetSpritePosition(enemy1), null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
 
             //spriteBatch.DrawString(gameFont, "Insert Gameplay Here",
             //                       enemyPosition, Color.DarkRed);
