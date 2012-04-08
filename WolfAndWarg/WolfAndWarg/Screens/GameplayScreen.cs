@@ -75,6 +75,7 @@ namespace GameStateManagement
             enemy1.Health = 10;
             enemy1.IsFriendly = false;
             enemy1.Texture = this.content.Load<Texture2D>("enemymob");
+            
             map = new Map(ScreenManager, this.content);
 
             gameFont = content.Load<SpriteFont>("gamefont");
@@ -82,7 +83,7 @@ namespace GameStateManagement
             // A real game would probably have more content than this sample, so
             // it would take longer to load. We simulate that by delaying for a
             // while, giving you a chance to admire the beautiful loading screen.
-            Thread.Sleep(10);
+            //Thread.Sleep(10);
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -124,7 +125,7 @@ namespace GameStateManagement
             if (IsActive)
             {
                 //As this game is turn based we will only currently do stuff when the player moves
-
+                
 
                 //// Apply some random jitter to make the enemy move around.
                 //const float randomization = 10;

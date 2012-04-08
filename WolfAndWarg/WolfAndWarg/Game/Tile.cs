@@ -10,7 +10,14 @@ namespace WolfAndWarg.Game
     class Tile
     {
         public Point MapPosition { get; set;  }
-        public Vector2 ScreenPosition { get; set; }
+        public Vector2 GetScreenPosition(float tileWidth) { 
+            return new Vector2(MapPosition.X * tileWidth, MapPosition.Y * tileWidth);
+        }
         public Texture2D Texture { get; set; }
+        public Vector2 GetCentre(float tileWidth)
+        {
+            return new Vector2(tileWidth / 2 + (MapPosition.X * tileWidth), tileWidth / 2 + (MapPosition.Y * tileWidth));
+
+        }
     }
 }

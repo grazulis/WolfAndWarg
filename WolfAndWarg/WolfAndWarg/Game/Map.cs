@@ -15,23 +15,28 @@ namespace WolfAndWarg.Game
         {
             int x = 0;
             int y = 0;
-            int tileWidth = 64;
+            
             var numberOfTiles = screenManager.GraphicsDevice.Viewport.Width / tileWidth *
                                 (screenManager.GraphicsDevice.Viewport.Height + 64) / tileWidth;
             Tiles = new Tile[numberOfTiles];
             for (int i = 0; i < numberOfTiles; i++)
             {
-                Tiles[i] = new Tile { ScreenPosition = new Vector2(x, y), Texture = content.Load<Texture2D>("Tile") };
-                x += tileWidth;
-                if (x >= screenManager.GraphicsDevice.Viewport.Width)
+                Tiles[i] = new Tile {Texture = content.Load<Texture2D>("Tile"), MapPosition = new Point(x, y)};
+                x++;
+                if (Tiles[i].GetScreenPosition(tileWidth).X >= screenManager.GraphicsDevice.Viewport.Width)
                 {
                     x = 0;
-                    y += tileWidth;
+                    y++;
                 }
+
             }
         }
+        int tileWidth = 64;
+        public int TileWidth { 
+            get { return tileWidth; }
+            set { tileWidth = value; }
+        }
 
-        public int TileWidth { get; set; }
         public int TileHeight { get; set; }
         public Tile[] Tiles { get; set; }
 
@@ -39,7 +44,7 @@ namespace WolfAndWarg.Game
         {
             foreach (var tile in Tiles)
             {
-                spriteBatch.Draw(tile.Texture, tile.ScreenPosition, Color.White);
+                spriteBatch.Draw(tile.Texture, tile.GetScreenPosition(tileWidth), Color.White);
             }
         }
     }
