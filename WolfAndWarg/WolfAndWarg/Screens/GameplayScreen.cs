@@ -78,8 +78,8 @@ namespace GameStateManagement
             int x = 0;
             int y = 0;
             int tileWidth = 64;
-            var numberOfTiles = (ScreenManager.GraphicsDevice.Viewport.Width/tileWidth)*
-                                (ScreenManager.GraphicsDevice.Viewport.Height/tileWidth);
+            var numberOfTiles = ScreenManager.GraphicsDevice.Viewport.Width/tileWidth *
+                                (ScreenManager.GraphicsDevice.Viewport.Height + 64 )/tileWidth;
             map.Tiles = new Tile[numberOfTiles];
             for (int i = 0; i < numberOfTiles; i++)
             {
