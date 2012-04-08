@@ -37,6 +37,7 @@ namespace GameStateManagement
 
         Player player1 = new Player();
         Mob enemy1 = new Mob();
+        Map map = new Map();
 
         Random random = new Random();
 
@@ -74,7 +75,22 @@ namespace GameStateManagement
             enemy1.Health = 10;
             enemy1.IsFriendly = false;
             enemy1.Texture = this.content.Load<Texture2D>("enemymob");
-
+            int x = 0;
+            int y = 0;
+            int tileWidth = 64;
+            var numberOfTiles = (ScreenManager.GraphicsDevice.Viewport.Width/tileWidth)*
+                                (ScreenManager.GraphicsDevice.Viewport.Height/tileWidth);
+            map.Tiles = new Tile[numberOfTiles];
+            for (int i = 0; i < numberOfTiles; i++)
+            {
+                map.Tiles[i] = new Tile { ScreenPosition = new Vector2(x, y), Texture = this.content.Load<Texture2D>("Tile") };
+                x += tileWidth;
+                if(x >= ScreenManager.GraphicsDevice.Viewport.Width)
+                {
+                    x = 0;
+                    y += tileWidth;
+                }
+            }
 
             gameFont = content.Load<SpriteFont>("gamefont");
 
@@ -229,6 +245,11 @@ namespace GameStateManagement
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
             spriteBatch.Begin();
+
+            foreach (var tile in map.Tiles)
+            {
+                spriteBatch.Draw(tile.Texture, tile.ScreenPosition, Color.White);
+            }
 
             spriteBatch.Draw(player1.Texture, player1.Position, null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0 );
 
