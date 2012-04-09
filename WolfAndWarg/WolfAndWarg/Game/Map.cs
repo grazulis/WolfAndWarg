@@ -56,6 +56,12 @@ namespace WolfAndWarg.Game
             }
         }
 
+        public void SetTileObject(ISprite sprite)
+        {
+            GetTile(sprite.OldPosition).Object = null;
+            GetTile(sprite.Position).Object = sprite;
+        }
+
         public Vector2 GetSpritePosition(ISprite sprite)
         {
             Tile tile = GetTile(sprite.Position);

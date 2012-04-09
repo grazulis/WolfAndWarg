@@ -14,6 +14,7 @@ namespace WolfAndWarg.Game
         public int Health { get; set; }
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; }
+        public Vector2 OldPosition { get; set; }
 
         public void Move(Vector2 movement, Map map)
         {
@@ -27,8 +28,10 @@ namespace WolfAndWarg.Game
                 }
                 else
                 {
-                    //TODO Set tile object
+                    //Move and update tile object
+                    OldPosition = Position;
                     Position += movement;
+                    map.SetTileObject(this);
                 }
             }
         }
