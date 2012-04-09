@@ -11,9 +11,13 @@ namespace WolfAndWarg
         //Probably make this non-static in future.
         public static void Attack(ISprite attacker, ISprite defender)
         {
-            //If attack successful deduct 2 health
+            //Sometimes the game incorrectly confuses lack of movement with an attack
+            //This is a bodge fix until tile/map/combat sorted
+            if (attacker == defender) return;
+
             if (rnd.NextDouble() > 0.4)
             {
+                //If attack successful deduct 2 health
                 defender.Health -= 2;
 
             }

@@ -202,8 +202,6 @@ namespace GameStateManagement
 
                 //If movement or spacebar pressed then update positions
                 //Spacebar means skip turn
-                //BUG skipping sturns sometimes the warg doesn't update movement properly
-                //BUG skipping turn also seems to mean warg attacks even if not next to player
                 if(movement.Length() > 0 || (keyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)))
                 {
                     player1.Move(movement, map);
@@ -215,7 +213,7 @@ namespace GameStateManagement
                 {
                     ScreenManager.AddScreen(
                         new GameOverScreen(
-                            string.Format("Game Over! Player: {0} Warg: {1}", player1.Health, enemy1.Health)), 
+                            string.Format("Game Over! \n Player: {0} Warg: {1}", player1.Health, enemy1.Health)), 
                             ControllingPlayer
                         );
                 }

@@ -23,17 +23,18 @@ namespace WolfAndWarg.Game
             var movement = Vector2.Zero;
             
             movement = enemyDirection - Position;
-
+            
             movement.Normalize();
 
-            //TODO If player is next to mob then attack rather than move!
+            //round the movements to integers as the tiles positions are currently point-based
+            movement.X = (float)Math.Round(movement.X);
+            movement.Y = (float)Math.Round(movement.Y);
 
+            //TODO If player is next to mob then attack rather than move!
             if (!map.IsOverMapEdge(Position + movement))
             {
                 var targetTilePosition = map.GetTile(Position + movement);
-                //BUG There seems to be a bug where the movement isn't enough and seems to fool the getTile object
-                //Occurs when the player is next to the mob
-
+                
                 if (targetTilePosition.Object != null)
                 {
                     //Something there already - attack!
