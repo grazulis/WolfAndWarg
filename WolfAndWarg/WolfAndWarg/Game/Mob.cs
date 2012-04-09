@@ -37,6 +37,7 @@ namespace WolfAndWarg.Game
                 if (targetTilePosition.Object != null)
                 {
                     //Something there already - attack!
+                    CombatManager.Attack(this, targetTilePosition.Object);
                 }
                 else
                 {
