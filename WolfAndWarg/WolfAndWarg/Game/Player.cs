@@ -15,9 +15,22 @@ namespace WolfAndWarg.Game
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; }
 
-        public void Move(Vector2 movement)
+        public void Move(Vector2 movement, Map map)
         {
-            Position += movement;
+            if (!map.IsOverMapEdge(Position + movement))
+            {
+                var targetTilePosition = map.GetTile(Position + movement);
+
+                if (targetTilePosition.Object != null)
+                {
+                    //Something there already - 
+                }
+                else
+                {
+                    //TODO Set tile object
+                    Position += movement;
+                }
+            }
         }
     }
 }

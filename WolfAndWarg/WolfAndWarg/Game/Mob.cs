@@ -15,7 +15,7 @@ namespace WolfAndWarg.Game
         public int Health { get; set; }
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; }
-        public void Move(Vector2 playerPosition)
+        public void Move(Vector2 playerPosition, Map map)
         {
             var enemyDirection = Vector2.Lerp(Position, playerPosition, 0.99f);
 
@@ -24,8 +24,20 @@ namespace WolfAndWarg.Game
             movement = enemyDirection - Position;
 
             movement.Normalize();
-            
-            Position += movement;
+
+            if (!map.IsOverMapEdge(Position + movement))
+            {
+                var targetTilePosition = map.GetTile(Position + movement);
+
+                if (targetTilePosition.Object != null)
+                {
+                    //Something there already - 
+                }
+                else
+                {
+                    Position += movement;
+                }
+            }
         }
     }
 }

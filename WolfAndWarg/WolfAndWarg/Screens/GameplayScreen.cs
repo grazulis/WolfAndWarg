@@ -177,7 +177,7 @@ namespace GameStateManagement
                 // Otherwise move the player position.
                 Vector2 movement = Vector2.Zero;
 
-                //TODO Create Input helper to manage key presses better
+                //TODO Create Input helper/manager to manage key presses better
                 if (keyboardState.IsKeyDown(Keys.Left) && !previousKeyboardState.IsKeyDown(Keys.Left))
                     movement.X--;
                     
@@ -204,13 +204,11 @@ namespace GameStateManagement
 
                 if(movement.Length() > 0)
                 {
-                    player1.Move(movement);
-                    enemy1.Move(player1.Position);
+                    player1.Move(movement, map);
+                    enemy1.Move(player1.Position, map);
                     
                 }
-                
 
-                
             }
             previousKeyboardState = keyboardState;
         }

@@ -23,15 +23,18 @@ namespace WolfAndWarg.Game
             {
                 Tiles[i] = new Tile {Texture = content.Load<Texture2D>("Tile"), MapPosition = new Point(x, y)};
                 x++;
-                if (Tiles[i].GetScreenPosition(tileWidth).X >= screenManager.GraphicsDevice.Viewport.Width)
+                //See if the width of this tile goes over the width of the screen, if so then start next row
+                //This will probably mean that tile will go over edge of screen in some cases
+                //but am not worried abou that for now.
+                if (Tiles[i].GetScreenPosition(tileWidth).X + tileWidth >= screenManager.GraphicsDevice.Viewport.Width)
                 {
-                    if (MapWidth == 0) MapWidth = x;
+                    if (MapWidth == 0) MapWidth = x-1;
                     x = 0;
                     y++;
                 }
 
             }
-            MapHeight = y;
+            MapHeight = y-1;
         }
         int tileWidth = 64;
         public int TileWidth { 
@@ -55,7 +58,7 @@ namespace WolfAndWarg.Game
 
         public Vector2 GetSpritePosition(ISprite sprite)
         {
-            var tile = Tiles.First(x => x.MapPosition.X == (int) sprite.Position.X && x.MapPosition.Y == (int) sprite.Position.Y);
+            Tile tile = GetTile(sprite.Position);
             var centre =  tile.GetCentre(tileWidth);
 
             //Magic number 4 here because we are currently displaying sprite a half size.
@@ -63,6 +66,16 @@ namespace WolfAndWarg.Game
             centre.Y -= sprite.Texture.Height/4;
             centre.X -= sprite.Texture.Width/4;
             return centre;
+        }
+
+        public Tile GetTile(Vector2 position)
+        {
+            return Tiles.First(x => x.MapPosition.X == (int) position.X && x.MapPosition.Y == (int) position.Y);
+        }
+
+        public bool IsOverMapEdge(Vector2 position)
+        {
+            return position.X < 0 || position.X > MapWidth || position.Y < 0 || position.Y > MapHeight;
         }
     }
 
