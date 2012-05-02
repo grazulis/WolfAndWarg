@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace WolfAndWarg.Game
 {
-    class Player : ISprite
+    public class Player : ISprite
     {
         
         public int Health { get; set; }

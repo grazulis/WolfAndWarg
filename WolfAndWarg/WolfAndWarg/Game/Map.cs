@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace WolfAndWarg.Game
 {
-    internal class Map
+    public class Map
     {
         public Map(ScreenManager screenManager, ContentManager content)
         {

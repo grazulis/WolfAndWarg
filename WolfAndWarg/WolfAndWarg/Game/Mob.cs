@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace WolfAndWarg.Game
 {
-    class Mob : ISprite
+    public class Mob : ISprite
     {
         private Random random = new Random(DateTime.Now.Millisecond);
         public string Name { get; set; }

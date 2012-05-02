@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace WolfAndWarg.Game
 {
-    class Tile
+    public class Tile
     {
         public Point MapPosition { get; set;  }
         public Texture2D Texture { get; set; }

@@ -32,9 +32,6 @@ namespace GameStateManagement
         ContentManager content;
         SpriteFont gameFont;
 
-        //Vector2 playerPosition = new Vector2(100, 100);
-        Vector2 enemyPosition = new Vector2(100, 100);
-
         Player player1 = new Player();
         Mob enemy1 = new Mob();
         Map map;
@@ -124,23 +121,7 @@ namespace GameStateManagement
             if (IsActive)
             {
                 //As this game is turn based we will only currently do stuff when the player moves
-                
-
-                //// Apply some random jitter to make the enemy move around.
-                //const float randomization = 10;
-
-                //enemyPosition.X += (float)(random.NextDouble() - 0.5) * randomization;
-                //enemyPosition.Y += (float)(random.NextDouble() - 0.5) * randomization;
-
-                //// Apply a stabilizing force to stop the enemy moving off the screen.
-                //Vector2 targetPosition = new Vector2(
-                //    ScreenManager.GraphicsDevice.Viewport.Width / 2 , 
-                //    200);
-
-                //enemy1.Position = Vector2.Lerp(enemyPosition, targetPosition, 0.05f);
-
-                //// TODO: this game isn't very fun! You could probably improve
-                //// it by inserting something more interesting in this space :-)
+                //In future though this will be needed to manage animations, and other useful inter-turn stuff
             }
         }
 
@@ -232,19 +213,14 @@ namespace GameStateManagement
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
                                                Color.White, 0, 0);
 
-            // Our player and enemy are both actually just text strings.
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-
             spriteBatch.Begin();
-
             map.Draw(spriteBatch);
-
             spriteBatch.Draw(player1.Texture, map.GetSpritePosition(player1), null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0 );
-
             spriteBatch.Draw(enemy1.Texture, map.GetSpritePosition(enemy1), null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
 
-            //spriteBatch.DrawString(gameFont, "Insert Gameplay Here",
-            //                       enemyPosition, Color.DarkRed);
+            spriteBatch.DrawString(gameFont, string.Format("Player: {0} Warg: {1}", player1.Health, enemy1.Health), new Vector2(10,10)
+                                   , Color.DarkRed);
 
             spriteBatch.End();
 
