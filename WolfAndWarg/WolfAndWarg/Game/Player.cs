@@ -10,11 +10,15 @@ namespace WolfAndWarg.Game
 {
     public class Player : ISprite
     {
-        
         public int Health { get; set; }
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 OldPosition { get; set; }
+        
+        public void Draw(SpriteBatch spriteBatch, Vector2 mapLocation)
+        {
+            spriteBatch.Draw(Texture, mapLocation, null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);  
+        }
 
         public void Move(Vector2 movement, Map map)
         {

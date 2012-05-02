@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using WolfAndWarg;
 using WolfAndWarg.Game;
 
 #endregion
@@ -29,14 +30,14 @@ namespace GameStateManagement
     {
         #region Fields
 
+        //TODO Remove content and spritefont
         ContentManager content;
-        SpriteFont gameFont;
+        
 
-        Player player1 = new Player();
-        Mob enemy1 = new Mob();
-        Map map;
-
-        Random random = new Random();
+        //Player player1 = new Player();
+        //Mob enemy1 = new Mob();
+        //Map map;
+        private Session session;
 
         float pauseAlpha;
 
@@ -60,26 +61,7 @@ namespace GameStateManagement
         /// </summary>
         public override void LoadContent()
         {
-            if (content == null)
-                content = new ContentManager(ScreenManager.Game.Services, "Content");
-
-            player1.Health = 10;
-            player1.Texture = this.content.Load<Texture2D>("player");
-            var playerStartPosition = new Vector2(5,5);
-            player1.Position = playerStartPosition;
-
-            enemy1.Health = 10;
-            enemy1.IsFriendly = false;
-            enemy1.Texture = this.content.Load<Texture2D>("enemymob");
-            
-            map = new Map(ScreenManager, this.content);
-
-            gameFont = content.Load<SpriteFont>("gamefont");
-
-            // A real game would probably have more content than this sample, so
-            // it would take longer to load. We simulate that by delaying for a
-            // while, giving you a chance to admire the beautiful loading screen.
-            //Thread.Sleep(10);
+            session = new Session(ScreenManager);
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -93,7 +75,7 @@ namespace GameStateManagement
         /// </summary>
         public override void UnloadContent()
         {
-            content.Unload();
+            session.Unload();
         }
 
 
@@ -137,69 +119,63 @@ namespace GameStateManagement
 
             
             // Look up inputs for the active player profile.
-            int playerIndex = (int)ControllingPlayer.Value;
-
-            KeyboardState keyboardState = input.CurrentKeyboardStates[playerIndex];
-            GamePadState gamePadState = input.CurrentGamePadStates[playerIndex];
-
-            // The game pauses either if the user presses the pause button, or if
-            // they unplug the active gamepad. This requires us to keep track of
-            // whether a gamepad was ever plugged in, because we don't want to pause
-            // on PC if they are playing with a keyboard and have no gamepad at all!
-            bool gamePadDisconnected = !gamePadState.IsConnected &&
-                                       input.GamePadWasConnected[playerIndex];
-
-            if (input.IsPauseGame(ControllingPlayer) || gamePadDisconnected)
+            if (ControllingPlayer != null)
             {
-                ScreenManager.AddScreen(new PauseMenuScreen(), ControllingPlayer);
-            }
-            else
-            {
-                // Otherwise move the player position.
-                Vector2 movement = Vector2.Zero;
+                int playerIndex = (int)ControllingPlayer.Value;
 
-                //TODO Create Input helper/manager to manage key presses better
-                if (keyboardState.IsKeyDown(Keys.Left) && !previousKeyboardState.IsKeyDown(Keys.Left))
-                    movement.X--;
+                KeyboardState keyboardState = input.CurrentKeyboardStates[playerIndex];
+                GamePadState gamePadState = input.CurrentGamePadStates[playerIndex];
+
+                // The game pauses either if the user presses the pause button, or if
+                // they unplug the active gamepad. This requires us to keep track of
+                // whether a gamepad was ever plugged in, because we don't want to pause
+                // on PC if they are playing with a keyboard and have no gamepad at all!
+                bool gamePadDisconnected = !gamePadState.IsConnected &&
+                                           input.GamePadWasConnected[playerIndex];
+
+                if (input.IsPauseGame(ControllingPlayer) || gamePadDisconnected)
+                {
+                    ScreenManager.AddScreen(new PauseMenuScreen(), ControllingPlayer);
+                }
+                else
+                {
+                    // Otherwise move the player position.
+                    Vector2 movement = Vector2.Zero;
+
+                    //TODO Create Input helper/manager to manage key presses better
+                    if (keyboardState.IsKeyDown(Keys.Left) && !previousKeyboardState.IsKeyDown(Keys.Left))
+                        movement.X--;
                     
-                if (keyboardState.IsKeyDown(Keys.Right) && !previousKeyboardState.IsKeyDown(Keys.Right))
-                    movement.X++;
+                    if (keyboardState.IsKeyDown(Keys.Right) && !previousKeyboardState.IsKeyDown(Keys.Right))
+                        movement.X++;
 
-                if (keyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up))
-                    movement.Y--;
+                    if (keyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up))
+                        movement.Y--;
 
-                if (keyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down))
-                    movement.Y++;
+                    if (keyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down))
+                        movement.Y++;
 
-                Vector2 thumbstick = gamePadState.ThumbSticks.Left;
+                    Vector2 thumbstick = gamePadState.ThumbSticks.Left;
 
-                movement.X += thumbstick.X;
-                movement.Y -= thumbstick.Y;
+                    movement.X += thumbstick.X;
+                    movement.Y -= thumbstick.Y;
 
-                if (movement.Length() > 1)
-                {
-                    movement.Normalize();
-                }
+                    if (movement.Length() > 1)
+                    {
+                        movement.Normalize();
+                    }
 
-                //If movement or spacebar pressed then update positions
-                //Spacebar means skip turn
-                if(movement.Length() > 0 || (keyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)))
-                {
-                    player1.Move(movement, map);
-                    enemy1.Move(player1.Position, map);
+                    //If movement or spacebar pressed then update positions
+                    //Spacebar means skip turn
+                    if(movement.Length() > 0 || (keyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)))
+                    {
+                        session.Move(ControllingPlayer, movement);
                     
-                }
+                    }
 
-                if(player1.Health <= 0 || enemy1.Health <= 0)
-                {
-                    ScreenManager.AddScreen(
-                        new GameOverScreen(
-                            string.Format("Game Over! \n Player: {0} Warg: {1}", player1.Health, enemy1.Health)), 
-                            ControllingPlayer
-                        );
                 }
+                previousKeyboardState = keyboardState;
             }
-            previousKeyboardState = keyboardState;
         }
 
 
@@ -211,20 +187,10 @@ namespace GameStateManagement
         {
             // Set background colour to White
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
-                                               Color.White, 0, 0);
+                                              Color.White, 0, 0);
+            session.Draw();
 
-            SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-            spriteBatch.Begin();
-            map.Draw(spriteBatch);
-            spriteBatch.Draw(player1.Texture, map.GetSpritePosition(player1), null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0 );
-            spriteBatch.Draw(enemy1.Texture, map.GetSpritePosition(enemy1), null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
-
-            spriteBatch.DrawString(gameFont, string.Format("Player: {0} Warg: {1}", player1.Health, enemy1.Health), new Vector2(10,10)
-                                   , Color.DarkRed);
-
-            spriteBatch.End();
-
-            // If the game is transitioning on or off, fade it out to black.
+            // If the game is transitioning on or off, fade it out to black.);
             if (TransitionPosition > 0 || pauseAlpha > 0)
             {
                 float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, pauseAlpha / 2);
