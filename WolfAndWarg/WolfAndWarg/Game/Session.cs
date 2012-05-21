@@ -18,6 +18,8 @@ namespace WolfAndWarg
                 content = new ContentManager(screenManager.Game.Services, "Content");
             players.Add(0, new Player{Health = 10, Position = new Vector2(5, 5), Texture = content.Load<Texture2D>("player")});
             mobs.Add(1, new Mob { Health = 10, IsFriendly = false, Position = new Vector2(0, 0), Texture = content.Load<Texture2D>("enemymob") });
+            mobs.Add(2, new Mob { Health = 10, IsFriendly = false, Position = new Vector2(15, 10), Texture = content.Load<Texture2D>("enemymob") });
+            
             map = new Map(screenManager, content);
             gameFont = content.Load<SpriteFont>("gamefont");
         }

@@ -162,6 +162,33 @@ namespace GameStateManagement
             }
         }
 
+        /// <summary>
+        /// Helper for checking if a button was newly pressed during this update.
+        /// The controllingPlayer parameter specifies which player to read input for.
+        /// If this is null, it will accept input from any player. When a button press
+        /// is detected, the output playerIndex reports which player pressed it.
+        /// </summary>
+        public bool IsNewButtonLeftClick(PlayerIndex? controllingPlayer,
+                                                     out PlayerIndex playerIndex)
+        {
+
+            if (controllingPlayer.HasValue)
+            {
+                // Read input from the specified player.
+                playerIndex = controllingPlayer.Value;
+                int i = (int)playerIndex;
+                return (CurrentMouseState[i].LeftButton == ButtonState.Pressed && LastMouseState[i].LeftButton == ButtonState.Released);
+            }
+            else
+            {
+                // Accept input from any player.
+                return (IsNewButtonLeftClick(PlayerIndex.One, out playerIndex) ||
+                        IsNewButtonLeftClick(PlayerIndex.Two, out playerIndex) ||
+                        IsNewButtonLeftClick(PlayerIndex.Three, out playerIndex) ||
+                        IsNewButtonLeftClick(PlayerIndex.Four, out playerIndex));
+            }
+        }
+
 
         /// <summary>
         /// Checks for a "menu select" input action.
@@ -175,7 +202,8 @@ namespace GameStateManagement
             return IsNewKeyPress(Keys.Space, controllingPlayer, out playerIndex) ||
                    IsNewKeyPress(Keys.Enter, controllingPlayer, out playerIndex) ||
                    IsNewButtonPress(Buttons.A, controllingPlayer, out playerIndex) ||
-                   IsNewButtonPress(Buttons.Start, controllingPlayer, out playerIndex);
+                   IsNewButtonPress(Buttons.Start, controllingPlayer, out playerIndex) ||
+                   IsNewButtonLeftClick(controllingPlayer, out playerIndex);
         }
 
 

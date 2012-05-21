@@ -39,6 +39,9 @@ namespace WolfAndWarg
             // Create the screen manager component.
             screenManager = new ScreenManager(this);
 
+            //Make mouse visible
+            this.IsMouseVisible = true;
+
             Components.Add(screenManager);
 
             // Activate the first screens.
