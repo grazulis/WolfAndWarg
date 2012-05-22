@@ -187,7 +187,7 @@ namespace GameStateManagement
         {
             // Set background colour to White
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
-                                              Color.White, 0, 0);
+                                              Color.Black, 0, 0);
             session.Draw();
 
             // If the game is transitioning on or off, fade it out to black.);

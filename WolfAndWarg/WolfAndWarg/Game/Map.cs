@@ -11,42 +11,36 @@ namespace WolfAndWarg.Game
 {
     public class Map
     {
+        
         public Map(ScreenManager screenManager, ContentManager content)
         {
             //TODO In future width will create viewport so map can be bigger than the width of the window
-            MapWidth = (screenManager.GraphicsDevice.Viewport.Width/tileWidth) - 1;
-            MapHeight = (screenManager.GraphicsDevice.Viewport.Height/tileWidth) - 1;
+            MapWidth = (screenManager.GraphicsDevice.Viewport.Width/TileWidth) * 2;
+            MapHeight = (screenManager.GraphicsDevice.Viewport.Height/TileWidth) *2;
             Tiles = new Tile[MapWidth + 1,MapHeight + 1];
             for (int y = 0; y <= MapHeight; y++)
             {
                 for (int x = 0; x <= MapWidth; x++)
                 {
-                    Tiles[x, y] = new Tile {Texture = content.Load<Texture2D>("Tile"), MapPosition = new Point(x, y)};
+                    Tiles[x, y] = new Tile {Texture = content.Load<Texture2D>("Tile"), MapPosition = new Point(x, y), TileSize = new Point(64, 64)};
                 }
             }
         }
 
-        private int tileWidth = 64;
-
-        public int TileWidth
-        {
-            get { return tileWidth; }
-            set { tileWidth = value; }
-        }
-
-        public int TileHeight { get; set; }
+        public int TileWidth = 64;
+        
         public Tile[,] Tiles { get; set; }
 
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (var tile in Tiles)
-            {
-                spriteBatch.Draw(tile.Texture, tile.GetScreenPosition(tileWidth), Color.White);
-            }
-        }
+        //public void Draw(SpriteBatch spriteBatch)
+        //{
+        //    foreach (var tile in Tiles)
+        //    {
+        //        spriteBatch.Draw(tile.Texture, tile.GetScreenPosition(tileWidth), Color.White);
+        //    }
+        //}
 
         public void SetTileObject(ISprite sprite)
         {
@@ -57,12 +51,12 @@ namespace WolfAndWarg.Game
         public Vector2 GetSpritePosition(ISprite sprite)
         {
             Tile tile = GetTile(sprite.Position);
-            var centre = tile.GetCentre(tileWidth);
+            var centre = tile.GetCentre();
 
             //Magic number 4 here because we are currently displaying sprite a half size.
             //TODO Find better way to manage this
-            centre.Y -= sprite.Texture.Height/4;
-            centre.X -= sprite.Texture.Width/4;
+            centre.Y -= sprite.Texture.Height / 4;
+            centre.X -= sprite.Texture.Width / 4;
             return centre;
         }
 

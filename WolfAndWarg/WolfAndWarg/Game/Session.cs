@@ -21,6 +21,8 @@ namespace WolfAndWarg
             mobs.Add(2, new Mob { Health = 10, IsFriendly = false, Position = new Vector2(15, 10), Texture = content.Load<Texture2D>("enemymob") });
             
             map = new Map(screenManager, content);
+            tileManager = new TileManager { Map = map, Viewport = screenManager.GraphicsDevice.Viewport };
+
             gameFont = content.Load<SpriteFont>("gamefont");
         }
 
@@ -32,6 +34,7 @@ namespace WolfAndWarg
         public Dictionary<int, Mob> mobs = new Dictionary<int, Mob>();
         public Map map;
         public string SessionState;
+        public TileManager tileManager;
 
         public void Move(PlayerIndex? controllingPlayer, Vector2 movement)
         {
@@ -49,7 +52,11 @@ namespace WolfAndWarg
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
             spriteBatch.Begin();
             string hud = "";
-            map.Draw(spriteBatch);
+            //map.Draw(spriteBatch);
+            tileManager.PlayerPosition = players[0].Position;
+            tileManager.Update();
+            tileManager.DrawLayers(spriteBatch);
+
             foreach (var player in players)
             {
                 spriteBatch.Draw(player.Value.Texture, map.GetSpritePosition(player.Value), null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
