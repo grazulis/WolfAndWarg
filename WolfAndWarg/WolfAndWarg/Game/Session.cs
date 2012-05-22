@@ -49,6 +49,7 @@ namespace WolfAndWarg
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
             spriteBatch.Begin();
             string hud = "";
+            map.Draw(spriteBatch);
             foreach (var player in players)
             {
                 spriteBatch.Draw(player.Value.Texture, map.GetSpritePosition(player.Value), null, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
