@@ -9,5 +9,6 @@ namespace WolfAndWarg.Game
         Vector2 OldPosition { get; set; }
         Texture2D Texture { get; set; }
         int Health { get; set; }
+        int Defence { get; set; }
     }
 }

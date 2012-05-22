@@ -11,6 +11,9 @@ namespace WolfAndWarg.Game
     public class Player : ISprite
     {
         public int Health { get; set; }
+
+        public int Defence { get; set; }
+
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 OldPosition { get; set; }

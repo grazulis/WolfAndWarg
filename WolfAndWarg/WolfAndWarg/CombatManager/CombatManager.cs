@@ -15,16 +15,21 @@ namespace WolfAndWarg
             //This is a bodge fix until tile/map/combat sorted
             if (attacker == defender) return;
 
-            if (rnd.NextDouble() > 0.4)
+            if (rnd.NextDouble() > 0.1 * defender.Defence)
             {
                 //If attack successful deduct 2 health
                 defender.Health -= 2;
-
+                if (defender.Health < 0) 
+                {defender.Health = 0;
+                
+                }
             }
             else
             {
                 //Otherwise attacker loses 1 health in counter-attack
                 attacker.Health--;
+                if (attacker.Health < 0) attacker.Health = 0;
+              
             }
         }
 
